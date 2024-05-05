@@ -7,6 +7,9 @@ import requests
 from bs4 import BeautifulSoup
 from telegraph import upload_file
 
+import pathlib
+cur_dir = pathlib.Path(__file__).parent.resolve()
+
 def getmoreinfo(url):
     headers = {
         "Accept-Language": "en-US,en;q=0.5"
@@ -61,18 +64,18 @@ def generate_data(url):
     }
     
     return data 
-
-if os.path.exists("result.jpg"):
-    os.remove("result.jpg")
-    print(f"File '{"result.jpg"}' deleted successfully.")
+file_name = os.path.join(cur_dir, "result.jpg")
+if os.path.exists(file_name):
+    os.remove(file_name)
+    print(f"File '{file_name}' deleted successfully.")
 else:
-    print(f"File '{"result.jpg"}' does not exist.")
+    print(f"File '{file_name}' does not exist.")
 
 from image.getimage import getimage
 def get_url(url):
     getimage(generate_data(url), "")
 
-    link = upload_file("./result.jpg")
+    link = upload_file(file_name)
     generated_Link = "https://telegra.ph" + "".join(link)
 
     print(generated_Link)

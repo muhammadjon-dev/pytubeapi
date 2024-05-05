@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+
 from getdata import get_url
 
 app = Flask(__name__)
