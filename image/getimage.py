@@ -1,12 +1,17 @@
 from PIL import Image, ImageDraw, ImageFont
 import requests
 from io import BytesIO
-import json
+import os
+import pathlib
 
+# Get the current directory
+cur_dir = pathlib.Path(__file__).parent.resolve()
 
+# Get the parent directory
+parent_dir = cur_dir.parent
 
 def getimage(data, content):
-	template_image_path = 'ftemplate.png'
+	template_image_path = os.path.join(parent_dir, "ftemplate.png")
 	template_image = Image.open(template_image_path)
 
 	# Load the avatar image
@@ -39,8 +44,8 @@ def getimage(data, content):
 	length_position = (200, 620)
 
 	# Define font and font size
-	font = ImageFont.truetype(font="montserrat_r.ttf", size=32)
-	font_b = ImageFont.truetype(font="montserrat_b.ttf", size=32)
+	font = ImageFont.truetype(font=os.path.join(parent_dir, "montserrat_r.ttf"), size=32)
+	font_b = ImageFont.truetype(font=os.path.join(parent_dir, "montserrat_r.ttf"), size=32)
 
 
 
@@ -57,7 +62,7 @@ def getimage(data, content):
 		template_image = template_image.convert('RGB')
 
 		# Save the edited image as JPEG
-		template_image.save("result.jpg")
+		template_image.save(os.path.join(parent_dir, "result.jpg"))
 
 		print("Image saved successfully.")
 	except Exception as e:

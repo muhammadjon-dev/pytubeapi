@@ -1,5 +1,5 @@
 import datetime
-from pytube import *
+from pytube import YouTube, Playlist
 
 import re, os
 import json
@@ -79,3 +79,5 @@ def get_url(url):
     generated_Link = "https://telegra.ph" + "".join(link)
 
     print(generated_Link)
+
+    return generated_Link
