@@ -45,7 +45,7 @@ def getimage(data, content):
 
 	# Define font and font size
 	font = ImageFont.truetype(font=os.path.join(parent_dir, "montserrat_r.ttf"), size=32)
-	font_b = ImageFont.truetype(font=os.path.join(parent_dir, "montserrat_r.ttf"), size=32)
+	font_b = ImageFont.truetype(font=os.path.join(parent_dir, "montserrat_b.ttf"), size=32)
 
 
 
