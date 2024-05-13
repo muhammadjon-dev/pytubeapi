@@ -23,14 +23,14 @@ def getmoreinfo(url):
     vid_info = {}
     try:
         vid_info["title"] = data_yt['pageHeaderRenderer']['pageTitle']
-        vid_info["avatar"] = data_yt['pageHeaderRenderer']['content']['pageHeaderViewModel']['image']['decoratedAvatarViewModel']['avatar']['avatarViewModel']['image']['sources'][0]['url']
+        vid_info["avatar"] = data_yt['pageHeaderRenderer']['content']['pageHeaderViewModel']['image']['decoratedAvatarViewModel']['avatar']['avatarViewModel']['image']['sources'][2]['url']
         vid_info["subscribers"] = data_yt['pageHeaderRenderer']['content']['pageHeaderViewModel']['metadata']['contentMetadataViewModel']['metadataRows'][1]['metadataParts'][0]['text']['content'].split()[0]
         vid_info["videos"] = data_yt['pageHeaderRenderer']['content']['pageHeaderViewModel']['metadata']['contentMetadataViewModel']['metadataRows'][1]['metadataParts'][1]['text']['content'].split()[0]
         print("1 worked")
     except KeyError as er:
         print("2 worked")
         vid_info["title"] = data_yt['c4TabbedHeaderRenderer']['title']
-        vid_info["avatar"] = data_yt['c4TabbedHeaderRenderer']['avatar']['thumbnails'][0]['url']
+        vid_info["avatar"] = data_yt['c4TabbedHeaderRenderer']['avatar']['thumbnails'][2]['url']
         vid_info["subscribers"] = data_yt['c4TabbedHeaderRenderer']['subscriberCountText']['simpleText'].split()[0]
         vid_info["videos"] = data_yt['c4TabbedHeaderRenderer']['videosCountText']['runs'][0]['text'].split()[0]
         
@@ -48,10 +48,31 @@ def seconds_to_hours_minutes(seconds):
     
     return f"{hours}h {minutes}min {remaining_seconds}sec"
 
-def generate_data(url):
-    ytvid = YouTube(url)
+def num2text(num):
+    if num > 1000000:
+        res = f"{round(num/1000000, 2)}M avg.views"
+    elif num > 1000:
+        res = f"{round(num/1000, 2)}K avg.views"
+    else:
+        res = f"{round(num, 2)} avg.views"
+        
+    return res
+
+def generate_data(url, content):
+    data_list = []
+    if content == "playlist":
+        playlist = Playlist(url)
+
+        for vid in playlist:
+            video = YouTube(vid) 
+            data_list.append(video.views)
+        ytvid = YouTube(playlist[0])
+    else:
+        ytvid = YouTube(url)
     
     info = getmoreinfo(ytvid.channel_url)
+    
+    
     data = {
         "avatar": info['avatar'],
         "channel" : info['title'],
@@ -62,6 +83,10 @@ def generate_data(url):
         "length": seconds_to_hours_minutes(ytvid.length),
         "date": ytvid.publish_date.strftime("%d.%m.%Y")
     }
+    if content == "playlist":
+        data["all_views"] = data_list
+        data["views"] = num2text(sum(data_list)/len(data_list))
+        data["length"] = f"{len(data_list)} videos"
     
     return data 
 file_name = os.path.join(cur_dir, "result.jpg")
@@ -72,8 +97,8 @@ else:
     print(f"File '{file_name}' does not exist.")
 
 from image.getimage import getimage
-def get_url(url):
-    getimage(generate_data(url), "")
+def get_url(url, content):
+    getimage(generate_data(url, content), content)
 
     link = upload_file(file_name)
     generated_Link = "https://telegra.ph" + "".join(link)
@@ -81,3 +106,6 @@ def get_url(url):
     print(generated_Link)
 
     return generated_Link
+
+
+# print(get_url("https://www.youtube.com/watch?v=I_rIdpQTZPo", "video"))
