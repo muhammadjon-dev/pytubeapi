@@ -21,10 +21,11 @@ def spam_checker():
     url = data["url"]
     data_type = data["type"]
     
-    if not url.strip():
-        return jsonify({'error': 'Please enter valid url.'}), 400
-    
-    result = get_url(url)
+    if not url.strip() or not data_type.strip():
+        return jsonify({'error': 'Please enter valid data.'}), 400
+    if data_type not in ["playlist", "video"]:
+        return jsonify({'error': 'Please enter valid content type.'}), 400
+    result = get_url(url, data_type)
     return jsonify({"image": result}), 200
 
 if __name__ == '__main__':
