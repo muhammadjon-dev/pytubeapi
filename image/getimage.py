@@ -103,6 +103,7 @@ def getimage(data, content):
 		template_image.paste(graph_image, graph_position)
 
 		content_type = "Statistics"
+		info_title = "Playlist info"
 	else:
 		response = requests.get(data["cover"])
 		cover_image = Image.open(BytesIO(response.content)).resize((410, 230))
@@ -114,8 +115,10 @@ def getimage(data, content):
 		template_image.paste(cover_image, region)
   
 		content_type = "Thumbnail"
+		info_title = "Video info"
   
 	draw.text((581, 397), content_type, fill='black', font=ImageFont.truetype(font=os.path.join(parent_dir, "montserrat_sb.ttf"), size=32))
+	draw.text((68.19, 406.85), info_title, fill='black', font=ImageFont.truetype(font=os.path.join(parent_dir, "montserrat_sb.ttf"), size=32))
 		
 	try:
 		# Convert the image to RGB mode
