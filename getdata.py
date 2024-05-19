@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from telegraph import upload_file
 
 import pathlib
+
 cur_dir = pathlib.Path(__file__).parent.resolve()
 
 def getmoreinfo(url):
@@ -15,8 +16,12 @@ def getmoreinfo(url):
         "Accept-Language": "en-US,en;q=0.5"
     }
     soup = BeautifulSoup(requests.get(url, headers=headers, cookies={'CONSENT:': 'YES+1'}).text, "html.parser")
+    prettified_soup =str(soup.prettify())
     
-    data = re.search(r"var ytInitialData = ({.*});", str(soup.prettify())).group(1)
+    with open("m.txt", "w", encoding="utf-8") as f:
+        f.write(prettified_soup)
+        
+    data = re.search(r"var ytInitialData = ({.*});", prettified_soup).group(1)
 
     json_data = json.loads(data)
     data_yt = json_data['header']
@@ -38,10 +43,8 @@ def getmoreinfo(url):
 
 
 def seconds_to_hours_minutes(seconds):
-    # Create a timedelta object representing the duration in seconds
     duration = datetime.timedelta(seconds=seconds)
     
-    # Extract hours, minutes, and remaining seconds from the timedelta object
     hours = duration.seconds // 3600
     minutes = (duration.seconds % 3600) // 60
     remaining_seconds = duration.seconds % 60
@@ -89,7 +92,9 @@ def generate_data(url, content):
         data["length"] = f"{len(data_list)} videos"
     
     return data 
+
 file_name = os.path.join(cur_dir, "result.jpg")
+
 if os.path.exists(file_name):
     os.remove(file_name)
     print(f"File '{file_name}' deleted successfully.")
@@ -108,4 +113,4 @@ def get_url(url, content):
     return generated_Link
 
 
-# print(get_url("https://www.youtube.com/watch?v=I_rIdpQTZPo", "video"))
+print(get_url("https://youtube.com/playlist?list=PLNVG-lhrskZr8mddtLriGu7fkFnX9SzVC&si=qBK83S4HSZ16rxRS", "playlist"))
