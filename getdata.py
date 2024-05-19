@@ -18,8 +18,8 @@ def getmoreinfo(url):
     soup = BeautifulSoup(requests.get(url, headers=headers, cookies={'CONSENT:': 'YES+1'}).text, "html.parser")
     prettified_soup =str(soup.prettify())
     
-    with open("m.txt", "w", encoding="utf-8") as f:
-        f.write(prettified_soup)
+    # with open("m.txt", "w", encoding="utf-8") as f:
+    #     f.write(prettified_soup)
         
     data = re.search(r"var ytInitialData = ({.*});", prettified_soup).group(1)
 
