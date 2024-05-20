@@ -76,7 +76,7 @@ def getimage(data, content):
 		objects = [i for i in range(1, len(data["all_views"]) + 1)]
 		y_pos = np.arange(len(objects))
 		performance = data["all_views"]
-
+		print(performance)
 		plt.subplots(figsize=(4.3, 2.5))
 		plt.bar(y_pos, performance, align='center', alpha=0.5)
 		if len(objects)>10:
@@ -90,10 +90,13 @@ def getimage(data, content):
 		else:
 			plt.xticks(y_pos, objects)
 		plt.ylabel('Views')
+		plt.subplots_adjust(left=0.2)
+		plt.ylim(0, max(performance) + 10000)
   
 		# Save the plot to a BytesIO object
 		graph_buffer = BytesIO()
 		plt.savefig(graph_buffer, format='png')
+		# plt.show()
 		plt.close()
 
 		# Open the saved plot as an image

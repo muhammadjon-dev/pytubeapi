@@ -90,7 +90,7 @@ def generate_data(url, content):
         data["all_views"] = data_list
         data["views"] = num2text(sum(data_list)/len(data_list))
         data["length"] = f"{len(data_list)} videos"
-    
+    print(data_list)
     return data 
 
 file_name = os.path.join(cur_dir, "result.jpg")
@@ -113,4 +113,4 @@ def get_url(url, content):
     return generated_Link
 
 
-print(get_url("https://youtube.com/playlist?list=PLNVG-lhrskZr8mddtLriGu7fkFnX9SzVC&si=qBK83S4HSZ16rxRS", "playlist"))
+print(get_url("https://youtube.com/playlist?list=PLWKjhJtqVAbkmRvnFmOd4KhDdlK1oIq23&si=LQMt72K43MogNlT4", "playlist"))
